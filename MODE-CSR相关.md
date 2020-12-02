@@ -1,3 +1,5 @@
+
+
 # MODE/CSR相关
 
 [TOC]
@@ -10,16 +12,16 @@
     - U模式是最低级别，该模式主要执⾏⽤户程序，操作系统中对应于⽤户态；
     - S模式介于M模式和U模式之间，操作系统中对应于内核态，当⽤户需要内核资源时，向内核申请，并切换到内核态进⾏处理。
 
-![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/058ae3ad-47d4-42e3-8c75-244cc4fc9d49/untitled?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20201113%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20201113T043420Z&X-Amz-Expires=86400&X-Amz-Signature=f332393b3ff1a6e14ea7d52648ebf6bd88ce96d4aae6149000f1935f2ccdc586&X-Amz-SignedHeaders=host)
+![untitled](https://i.loli.net/2020/12/02/lItA9ZSzUaO43nv.png)
 
 ## 机器模式
 
 - 机器模式（缩写为 M 模式，M-mode）是 RISC-V 中 hart（hardware thread，硬件线程）可以执行的最高权限模式。在 M 模式下运行的 hart 对内存，I/O 和一些对于启动和配置系统来说必要的底层功能有着完全的使用权。
-    
+  
     - Hart：即硬件线程(hardware thread)。hart与软件线程不同，软件线程在 harts 上进行分时复用，大多数处理器核都只有一个hart。
 - 机器模式最重要的特性是拦截和处理异常（不寻常的运行时事件）的能力。
 - 从广义上来讲，中断和异常都被认为是一种广义上的异常。
-    
+  
     - 处理器广义上的异常，通常只分为**同步异常**（Synchronous Exception）和**异步异常**（Asynchronous Exception）。
 - RISC-V 中实现**精确异常**：保证异常之前的所有指令都完整地执行了，而后续的指令都没有开始执行（或等同于没有执行）。
 - 在 M 模式运行期间可能发生的**同步异常**有五种：
@@ -33,9 +35,8 @@
     
     - 非对齐地址异常 - 在有效地址不能被访问大小整除时发生，例如地址为 0x12 的amoadd.w。
     
-      
 - **三种标准的中断源**：软件、时钟和外部来源。
-    
+  
     - **软件中断：**通过向内存映射寄存器中存数来触发，并通常用于由一个 hart 中断另一个 hart（在其他架构中称为处理器间中断机制）。当
     - **时钟中断：**当实时计数器 mtime 大于 hart 的时间比较器（一个名为 mtimecmp 的内存映射寄存器）时，会触发时钟中断。
     - **外部中断：**由平台级中断控制器（大多数外部设备连接到这个中断控制器）引发。不同的硬件平台具有不同的内存映射并且需要中断控制器的不同特性，因此用于发出和消除这些中断的机制因平台而异。
@@ -127,7 +128,7 @@
     - ⽐如mie和mip都对应mstatus上的某些bit位，所以通过对mstatus进⾏⼀下按位运算，可以实现对不同bit位的设置，从⽽控制不同运算状态
     - 注意此处的mie和mip指的是mstatus上的状态位。
 
-![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/8fc9e2cc-e3b8-4e35-a141-e06c4c0594a7/untitled?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20201113%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20201113T043420Z&X-Amz-Expires=86400&X-Amz-Signature=765d9f07a1d74d23f36bf4aa715664a4801b46754a797f44b5f0d1e63e5eed0d&X-Amz-SignedHeaders=host)
+![untitled](https://i.loli.net/2020/12/02/w2lHOokX7KFRMx1.png)
 
 - **WARL：**write any value, read legal values
 - **MIE/SIE：**当运行在模式x下时，如果xIE=1，则全局中断启用；如果xIE=0，则全局中断禁用。
@@ -155,7 +156,7 @@
 - 当全局中断启用，并且mie/mip的位i置1时，中断i会被响应。
 - 一个挂起的中断可通过将mip的第i位清0来清除
 
-![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/a7d5c912-f212-4eec-bf14-175615fe6bd7/untitled?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20201113%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20201113T043422Z&X-Amz-Expires=86400&X-Amz-Signature=0188a2e4a0a4f82e177bcc46fc98fa42ac3506b01238936784881a3f9c5b551c&X-Amz-SignedHeaders=host)
+![untitled](https://i.loli.net/2020/12/02/3kMs8ZhLT1at7Bb.png)
 
 - MEIP与MEIE用于控制机器级的外部中断；MEIP是只读的，只能通过特定平台的中断控制器进行控制
 - METP与METE用于控制机器级计时器中断；MTIP是只读的，通过写入内存映射的machine-mode timer compare register来修改
@@ -177,11 +178,11 @@
 - mtvec(即Machine Trap-Vector Base-Address Register)寄存器，是一个MXLEN位的寄存器
 - 主要保存machine mode下的trap vector（可理解为中断向量）的设置，其包含⼀个基地址(Base)以及⼀个vector mode。
 
-![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/9b144fa3-738a-44f6-8eb8-6946bcf7307f/untitled?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20201113%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20201113T043422Z&X-Amz-Expires=86400&X-Amz-Signature=4369a37482b6b9c77abe36eff262bfa2c5a76bfb22a351b5aa6e9d3176b53b7b&X-Amz-SignedHeaders=host)
+![untitled](https://i.loli.net/2020/12/02/KRMqx2koIEdamuc.png)
 
 - Base段的值必须与4对齐，Mode设置可能会对Base的对齐有其他的限制。
 
-![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/01fb2c97-1768-4a29-9793-eff806db5c46/untitled?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20201113%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20201113T043422Z&X-Amz-Expires=86400&X-Amz-Signature=dcf4a31e982f553506d64a8e861c6f64f84d571fbfea2f8717b640fe6f4df3bd&X-Amz-SignedHeaders=host)
+![untitled](https://i.loli.net/2020/12/02/Qsv3PNAewDduTRk.png)
 
 - 当Mode=0，Direct模式下，所有进入M模式的trap都会使PC被设置为Base的值
 - 当Mode=1，vectored模式下，所有进入M模式的同步异常都会使PC被设置为Base的值；所有狭义中断会使PC被设置为Base的值加上中断号乘4。
@@ -194,7 +195,7 @@
 - 进入异常时，机器模式异常原因寄存器mcause被同时更新，以反映当前的异常种类，软件通过读取此寄存器获取异常原因
 - mcause的最高位为interrupt位，为1表示中断，为0表示异常，低31位为异常编号位（RV32）
 
-![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/d23dd9b2-6484-4514-ba78-f447af2bbce1/untitled?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20201113%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20201113T043422Z&X-Amz-Expires=86400&X-Amz-Signature=25b27ac018fb67fb4dab75376290642d3a2f37ea142bbaa753414ea6b64fa987&X-Amz-SignedHeaders=host)
+<img src="https://i.loli.net/2020/12/02/TzZEI7hKBfQWRuJ.png" alt="untitled" style="zoom:67%;" />
 
 
 
@@ -204,7 +205,7 @@
 - mtime以固定的频率自增(硬件实现)
 - **当mtime的值大于mtimecmp时，会产生计时器中断(unsigned number)**
 
-![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/d38d3571-23a6-4649-a1d8-b79ca09408ed/untitled?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20201113%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20201113T043422Z&X-Amz-Expires=86400&X-Amz-Signature=cb2a2c7ed12561c1072b056f8083ddcddacc8bc084c5d1e4336c33f3060a70c9&X-Amz-SignedHeaders=host)
+![untitled](https://i.loli.net/2020/12/02/E3CcfvKuniQgOXm.png)
 
 - 这个中断会一直持续，直到mtimecmp大于mtime，这一般通过修改mtimecmp实现
 - 只有当全局中断启用且mie的MTIE置位时才会产生中断
@@ -225,14 +226,14 @@
 
 - 同mstatus，是其的一个子集
 
-![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/5f121d19-f93b-485b-8ca9-18c7a1f76028/untitled?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20201113%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20201113T043422Z&X-Amz-Expires=86400&X-Amz-Signature=85bbb4c768bb524d5b77e311fbffe5ded8fa65d4832e71232b7f7e82e33ffd76&X-Amz-SignedHeaders=host)
+![untitled](https://i.loli.net/2020/12/02/vRqDX1I3Zk5wN7Q.png)
 
-###stvec寄存器
+### stvec寄存器
 
 - stvec(即Supervisor Trap Vector Bass Address Register)寄存器，是SXLEN位的可读写寄存器
 - 其作⽤与mtvec类似，区别是其保存的是supervisor mode对应的base和mode。
 
-![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0d360e8b-ff78-4e45-8534-b1aace99235a/untitled?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20201113%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20201113T043422Z&X-Amz-Expires=86400&X-Amz-Signature=3ed565da7739a153fda3823020ef9b18ab26c663d20eaede38a489866060c8ad&X-Amz-SignedHeaders=host)
+![untitled](https://i.loli.net/2020/12/02/K84xJzEb9eZB3Xh.png)
 
 ### sp寄存器
 
